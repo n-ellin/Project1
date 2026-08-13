@@ -1,13 +1,4 @@
 function ProductList({ list }) {
-    function getStatus (stok) {
-        if (stok > 0 ) {
-            return "Tersedia";
-        }   
-        else {
-            return "Habis";
-        }
-        
-    }
   return (
     <>
       <table className="">
@@ -25,7 +16,7 @@ function ProductList({ list }) {
               <td>{product.name}</td>
               <td>{product.price}</td>
               <td>{product.stok}</td>
-              <td>{getStatus(product.stok)}</td>
+              <td>{product.stok > 0 ? "Tersedia" : "Habis"}</td>
             </tr>
           ))}
         </tbody>
