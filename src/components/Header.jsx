@@ -1,5 +1,11 @@
 function Header() {
-  return <h2>Manajemen Produk</h2>;
+  return (
+    <header className="py-4">
+      <h2 className="text-center- fw-bold">
+        Manajemen Produk
+      </h2>
+    </header>
+  );
 }
 
 export default Header;

@@ -24,28 +24,38 @@ function ProductForm({ setProduct }) {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <label>Nama : </label>
-        <input
-          type="text"
-          value={isName}
-          onChange={(event) => setName(event.target.value)}
-        />{" "}
+      <form onSubmit={handleSubmit} className="form-product">
+        <div className="mb-3">
+          <label className="form-label1">Nama : </label>
+          <input
+            type="text"
+            className="form-control"
+            value={isName}
+            onChange={(event) => setName(event.target.value)}
+          />{" "}
+        </div>
         <br />
-        <label>Harga : </label>
-        <input
-          type="text"
-          value={isPrice}
-          onChange={(event) => setPrice(event.target.value)}
-        />{" "}
+        <div className="mb-3 ">
+          <label className="form-label">Harga : </label>
+          <input
+            type="number"
+            className="form-control"
+            value={isPrice}
+            onChange={(event) => setPrice(event.target.value)}
+          />{" "}
+        </div>
         <br />
-        <label>Stok : </label>
-        <input
-          type="text"
-          value={isStok}
-          onChange={(event) => setStok(event.target.value)}
-        /> <br />
-        <button type="submit">Tambah</button>
+        <div className="mb-4">
+          <label className="form-label">Stok : </label>
+          <input
+            type="number"
+            className="form-control"
+            value={isStok}
+            onChange={(event) => setStok(event.target.value)}
+          />{" "}
+        </div>
+        <br />
+        <button type="submit" className="btn btn-primary mb-3">Tambah</button>
       </form>
     </>
   );

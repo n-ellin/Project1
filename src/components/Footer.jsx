@@ -1,5 +1,5 @@
 function Footer() {
-  return <footer> &copy; Manajemen Produk</footer>;
+  return <footer className="text-center py-4"> &copy; Manajemen Produk</footer>;
 }
 
-export default Footer
+export default Footer;

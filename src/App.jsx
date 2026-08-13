@@ -7,16 +7,18 @@ import { useState } from "react";
 import { useEffect } from "react";
 
 function App() {
-  const [products, setProducts] = useState([])
+  const [products, setProducts] = useState([]);
 
-  useEffect (() => {
-    document.title = 'Produk (${products.length})';
+  useEffect(() => {
+    document.title = "Produk (${products.length})";
   }, [products]);
   return (
     <>
       <Header />
-      <ProductForm setProduct = {setProducts}/>
-      <ProductList list = {products}/>
+      <main className="container">
+        <ProductForm setProduct={setProducts} />
+        <ProductList list={products} />
+      </main>
       <Footer />
     </>
   );
