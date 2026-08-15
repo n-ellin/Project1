@@ -1,26 +1,35 @@
 import "./App.css";
-import Header from "./components/Header.jsx";
-import ProductList from "./components/ProductList.jsx";
-import ProductForm from "./components/ProductForm.jsx";
-import Footer from "./components/Footer.jsx";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import MainLayout from "./layouts/MainLayout.jsx";
+import About from "./pages/About.jsx";
+import Home from "./pages/Home.jsx";
+import ProductDetail from "./pages/ProductDetail.jsx";
+import Products from "./pages/Products.jsx";
+
 
 function App() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    document.title = "Produk (${products.length})";
+    document.title = `Produk (${products.length})`;
   }, [products]);
   return (
-    <>
-      <Header />
-      <main className="container">
-        <ProductForm setProduct={setProducts} />
-        <ProductList list={products} />
-      </main>
-      <Footer />
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/products"
+            element={<Products products={products} setProducts={setProducts} />}
+          >
+            <Route path=":id" element={<ProductDetail />} />
+          </Route>
+          <Route path="/about" element={<About />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 

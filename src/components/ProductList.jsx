@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function ProductList({ list }) {
   return (
     <>
@@ -5,6 +7,7 @@ function ProductList({ list }) {
         <thead className="table-dark">
           <tr>
             <th scope="col">No</th>
+            <th scope="col">Link</th>
             <th scope="col">Nama</th>
             <th scope="col">Harga</th>
             <th scope="col">Stok</th>
@@ -16,12 +19,13 @@ function ProductList({ list }) {
           {list.map((product) => (
             <tr key={product.id}>
               <th scope="row">{product.id}</th>
+              <td>
+                <Link to={`/products/${product.id}`}>Detail</Link>
+              </td>
               <td>{product.name}</td>
               <td>{product.price}</td>
               <td>{product.stok}</td>
-              <td>
-                {product.stok > 0 ? "Tersedia" : "Habis"}
-              </td>
+              <td>{product.stok > 0 ? "Tersedia" : "Habis"}</td>
             </tr>
           ))}
         </tbody>
@@ -31,4 +35,3 @@ function ProductList({ list }) {
 }
 
 export default ProductList;
-

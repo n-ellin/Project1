@@ -1,9 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function ProductForm({ setProduct }) {
-  const [isName, setName] = useState("");
-  const [isPrice, setPrice] = useState("");
-  const [isStok, setStok] = useState("");
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [stok, setStok] = useState("");
+
+  const navigate = useNavigate();
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -15,10 +18,9 @@ function ProductForm({ setProduct }) {
         price: isPrice,
         stok: isStok,
       };
-
       return [...prev, newProduct];
     });
-
+    navigate("/products");
     console.log("Produk berhasil ditambahkan");
   }
 
@@ -34,28 +36,30 @@ function ProductForm({ setProduct }) {
             onChange={(event) => setName(event.target.value)}
           />{" "}
         </div>
-        <br />
+
         <div className="mb-3 ">
           <label className="form-label">Harga : </label>
           <input
             type="number"
             className="form-control"
             value={isPrice}
-            onChange={(event) => setPrice(event.target.value)}
+            onChange={(event) => setPrice(Number(event.target.value))}
           />{" "}
         </div>
-        <br />
+
         <div className="mb-4">
           <label className="form-label">Stok : </label>
           <input
             type="number"
             className="form-control"
             value={isStok}
-            onChange={(event) => setStok(event.target.value)}
+            onChange={(event) => setStok(Number(event.target.value))}
           />{" "}
         </div>
-        <br />
-        <button type="submit" className="btn btn-primary mb-3">Tambah</button>
+
+        <button type="submit" className="btn btn-primary mb-3">
+          Tambah
+        </button>
       </form>
     </>
   );
