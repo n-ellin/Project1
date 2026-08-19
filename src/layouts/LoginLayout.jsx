@@ -5,3 +5,5 @@ function LoginLayout () {
         <Login />
     )
 }
+
+export default LoginLayout;

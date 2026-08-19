@@ -1,5 +1,11 @@
 function Footer() {
-  return <footer className="text-center py-4"> &copy; Manajemen Produk</footer>;
+  return (
+    <footer className="footer bg-white border-top py-4">
+      <div className="container text-center">
+        <p className="mb-0 text-secondary small">&copy; Manajemen Produk </p>
+      </div>
+    </footer>
+  );
 }
 
 export default Footer;
