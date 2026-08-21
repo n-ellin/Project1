@@ -1,66 +1,56 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { createProducts } from "../services/productService";
+import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { updateProducts } from "../services/productService";
 
-function ProductForm({ setProducts }) {
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-  const [stock, setStock] = useState("");
+function EditProductForm({ products, setProducts }) {
+  const { id } = useParams();
 
-  const [error, setError] = useState("");
+  const [error, setError] = useState();
 
   const navigate = useNavigate();
 
-  async function handleSubmit(event) {
+  const [price, setPrice] = useState("");
+  const [name, setName] = useState("");
+  const [stock, setStock] = useState("");
+
+  const product = products.find((product) => product.id === id);
+
+  useEffect(() => {
+    if (product) {
+      setName(product.name);
+      setPrice(product.price);
+      setStock(product.stock);
+    }
+  }, [product]);
+
+  async function submitHandle(event) {
     event.preventDefault();
-
-    setError("");
-    if (name.trim() === "") {
-      setError("Produk Tidak boleh kosong.");
-      return;
-    }
-    if (price <= 0) {
-      setError("Produk harus lebih dari 0");
-      return;
-    }
-    if (stock < 0) {
-      setError("stok harus 0 atau lebih");
-      return;
-    }
-
-    const newProduct = {
+    const data = {
       name,
       price: Number(price),
       stock: Number(stock),
     };
 
     try {
-      const createdProduct = await createProducts(newProduct);
-
-      setProducts((prev) => [...prev, createdProduct]);
-
-      setName("");
-      setPrice("");
-      setStock("");
-
+      const updateProduct = await updateProducts(id, data);
+      setProducts((prev) =>
+        prev.map((product) => (product.id === id ? updateProduct : product)),
+      );
       navigate("/products");
     } catch {
-      setError("Gagal menambahkan produk");
+      setError("Produk gagal diperbarui");
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="form-product">
+    <form onSubmit={submitHandle} className="form-product">
       <div className="d-flex align-items-center gap-2 mb-4">
-        <div className="bg-primary-subtle text-primary rounded-3 p-2">
-          <i className="bi bi-plus-lg"></i>
-        </div>
-
         <div>
-          <h5 className="fw-bold mb-0">Tambah Produk</h5>
+          <h5 className="fw-bold mb-0">Edit Produk</h5>
           <small className="text-secondary">
-            Masukkan informasi produk baru
+            Masukkan informasi produk yang baru
           </small>
+          {error && <p className="text-danger">{error}</p> }
         </div>
       </div>
 
@@ -103,15 +93,14 @@ function ProductForm({ setProducts }) {
             required
           />
         </div>
-        {error && <p className="text-danger">{error} </p>}
       </div>
 
       <button type="submit" className="btn btn-primary rounded-3 px-4 mt-4">
-        <i className="bi bi-plus-lg me-2"></i>
-        Tambah Produk
+        <i className="bi bi-pencil me-2"></i>
+        Edit
       </button>
     </form>
   );
 }
 
-export default ProductForm;
+export default EditProductForm;

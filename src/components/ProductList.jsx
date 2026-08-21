@@ -1,14 +1,30 @@
 import { Link } from "react-router-dom";
+import { deleteProducts } from "../services/productService";
+import { useState } from "react";
 
-function ProductList({ list, setProducts }) {
-  const user = JSON.parse(localStorage.getItem("user"));
-  const role = user.role;
+function ProductList({ list, setProducts, loading }) {
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+  const role = user?.role;
+  const [error, setError] = useState("");
+  const [deletingId, setDeletingId] = useState(null);
+  const [search, setSearch] = useState("");
 
-  function remove(id) {
-    setProducts((prev) => {
-      return prev.filter((product) => product.id !== id);
-    });
+
+  async function remove(id) {
+    try {
+      setDeletingId(id);
+      
+      await deleteProducts(id);
+
+      setProducts((prev) => prev.filter((product) => product.id !== id));
+    } catch (error) {
+      setError("Produk gagal dihapus");
+    } finally {
+      setDeletingId(null);
+    }
   }
+
+  const filterProducts = list.filter((Product) => Product.name.toLowerCase().include(search.toLowerCase()));
 
   return (
     <div className="product-table-card">
@@ -28,6 +44,11 @@ function ProductList({ list, setProducts }) {
         </div>
       </div>
 
+      <div>
+        <input type="text" value={search} onChange={(event)} => setSearch (event.target.value)} placeholder = "Cari produk..." />
+      </div>
+
+      {error && <p className="text-danger">{error}</p>}
       <div className="table-responsive">
         <table className="table table-hover text-center align-middle">
           <thead>
@@ -43,7 +64,17 @@ function ProductList({ list, setProducts }) {
           </thead>
 
           <tbody>
-            {list.length === 0 ? (
+            {loading ? (
+              <tr>
+                <td
+                  className="py-5 text-secondary"
+                  colSpan={role === "Admin" ? 6 : 5}
+                >
+                  <i className="bi bi-arrow-clockwise"></i>
+                  Memuat data...
+                </td>
+              </tr>
+            ) : list.length === 0 ? (
               <tr>
                 <td
                   colSpan={role === "Admin" ? 6 : 5}
@@ -56,12 +87,10 @@ function ProductList({ list, setProducts }) {
             ) : (
               list.map((product, index) => (
                 <tr key={product.id}>
-                  <th>{index + 1}</th>
+                  <th>{product.id}</th>
 
                   <td>
-                    <div className="fw-semibold">
-                      {product.name}
-                    </div>
+                    <div className="fw-semibold">{product.name}</div>
                   </td>
 
                   <td className="fw-medium">
@@ -83,24 +112,30 @@ function ProductList({ list, setProducts }) {
                   </td>
 
                   <td>
-                    <Link
-                      to={`/products/${product.id}`}
-                      className="btn btn-outline-primary btn-sm rounded-pill me-2"
-                    >
-                      Detail
-                    </Link>
-
                     {role === "Admin" && (
                       <>
-                        <button className="btn btn-outline-primary btn-sm rounded-pill me-2">
+                        <Link
+                          to={`/products/${product.id}`}
+                          className="btn btn-outline-primary btn-sm rounded-pill me-2"
+                        >
+                          Detail
+                        </Link>
+
+                        <Link
+                          to={`/products/${product.id}/edit`}
+                          className="btn btn-outline-warning btn-sm rounded-pill me-2"
+                        >
                           Edit
-                        </button>
+                        </Link>
 
                         <button
                           className="btn btn-outline-danger btn-sm rounded-pill"
                           onClick={() => remove(product.id)}
+                          disabled={deletingId === product.id}
                         >
-                          Hapus
+                          {deletingId === product.id
+                            ? "Menghapus... "
+                            : "Hapus"}
                         </button>
                       </>
                     )}

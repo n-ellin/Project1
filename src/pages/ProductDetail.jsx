@@ -3,10 +3,10 @@ import { useParams, useOutletContext, Link } from "react-router-dom";
 
 function ProductDetail() {
   const { id } = useParams();
-
   const { products } = useOutletContext();
 
-  const product = products.find((product) => product.id === Number(id));
+
+  const product = products.find((product) => product.id === id);
 
   if (!product) {
     return (
